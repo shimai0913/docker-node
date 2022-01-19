@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/node/Dockerfile
+    container_name: keibord_frontend
+    volumes:
+    - ./src/frontend:/app
+    ports:
+      - ${FRONTEND_APP_PORT}:3000
+    # command: sh -c "cd /app/keibord && yarn start"
+    tty: true
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    container_name: keibord_web
+    ports:
+      - ${WEB_PORT}:80
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./src:/src
+      - ./nginx_log/:/var/log/nginx
